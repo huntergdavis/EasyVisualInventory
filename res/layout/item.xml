@@ -1,0 +1,72 @@
+<ScrollView 
+xmlns:android="http://schemas.android.com/apk/res/android" 
+android:layout_width="fill_parent" android:layout_height="fill_parent"> 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent" android:orientation="vertical"
+	android:id="@+id/linearLayout1" android:layout_width="fill_parent">
+	
+	<EditText android:layout_width="fill_parent" android:id="@+id/name"
+		android:text="Name" android:layout_height="wrap_content"></EditText>
+	<Spinner android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/units">
+
+	</Spinner>
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/splittextrow">
+
+		<TextView android:text="Currency" android:id="@+id/splittext"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1"></TextView>
+		<TextView android:text="Current Inventory" android:id="@+id/inventorytext"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1"></TextView>
+
+	</TableRow>
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/splitrow">
+		<Spinner android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:id="@+id/split"
+			android:layout_weight="1">
+		</Spinner>
+		<EditText android:layout_width="fill_parent" android:id="@+id/amount"
+			android:text="Amount" android:numeric="decimal" android:layout_height="wrap_content"
+			android:layout_weight="1"></EditText>
+	</TableRow>
+	
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/buyselltextrow">
+
+		<TextView android:text="Sell Price" android:id="@+id/sellpricetext"
+			android:layout_width="fill_parent" android:numeric="decimal" android:layout_height="wrap_content"
+			android:layout_weight="1"></TextView>
+		<TextView android:text="Buy Price" android:id="@+id/buypricetext"
+			android:layout_width="fill_parent" android:numeric="decimal" android:layout_height="wrap_content"
+			android:layout_weight="1"></TextView>
+
+	</TableRow>	
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/moneyrow">
+		<EditText android:layout_width="fill_parent" android:id="@+id/sellprice"
+			android:text="Sell Price" android:layout_height="wrap_content"
+			android:layout_weight="1"></EditText>
+		<EditText android:layout_width="fill_parent" android:id="@+id/buyprice"
+			android:text="Buy Price" android:layout_height="wrap_content"
+			android:layout_weight="1"></EditText>
+	</TableRow>
+	<TextView android:text="Running Total Profit" android:id="@+id/profittext"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+	<EditText android:layout_width="fill_parent" android:numeric="decimal" android:id="@+id/totalprofit"
+		android:text="Total Profit" android:layout_height="wrap_content"></EditText>
+	<ImageView android:src="@drawable/icon" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:id="@+id/photopreview"></ImageView>
+	<TableRow android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/logrow">	
+	<Button android:id="@+id/clearlogbutton" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:text="X" android:layout_weight=".1"/>		
+	<EditText android:layout_width="fill_parent" android:id="@+id/logfile"
+		android:text="Log File" android:layout_height="wrap_content"
+		android:isScrollContainer="true" android:layout_weight=".9"></EditText>
+	</TableRow>
+		
+</LinearLayout>
+</ScrollView>

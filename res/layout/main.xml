@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<TableRow android:orientation="horizontal"
+	 android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/galleryPlusRow"
+		android:visibility="visible" android:gravity="center_horizontal"
+		android:layout_weight=".1" android:layout_gravity="fill_horizontal|bottom">
+		<Button android:id="@+id/plusbutton" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:text="New"
+			android:textSize="8dip" android:onClick="AddNewItem" />
+		<Gallery android:id="@+id/photoInventory"
+			android:layout_width="fill_parent" android:layout_height="wrap_content" />
+	</TableRow>
+	<ImageView android:id="@+id/ImageView01" android:scaleType="fitStart"
+		android:layout_width="wrap_content" android:layout_height="fill_parent" 
+		android:layout_below="@+id/galleryPlusRow"/>
+	<TextView android:id="@+id/ItemName" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="Item Name Description X units Remaining "
+		android:layout_above="@+id/adView" />
+
+	<TableRow android:orientation="horizontal"
+		android:layout_alignParentBottom="true" android:layout_width="fill_parent"
+		android:layout_height="50dip" android:id="@+id/tableRow1"
+		android:visibility="visible" android:layout_weight=".1"
+		android:layout_gravity="fill_horizontal|bottom">
+		<Button android:id="@+id/buybutton" android:layout_height="wrap_content"
+			android:text="Buy" android:layout_width="wrap_content"
+			android:layout_weight="1" />
+		<Button android:id="@+id/sellbutton" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:text="Sell"
+			android:layout_weight="1" />
+		<Button android:id="@+id/bulkbutton" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:text="Bulk Sale"
+			android:layout_weight="1" />
+		<Button android:id="@+id/infobutton" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:text="Info"
+			android:layout_weight="1" />
+		<Button android:id="@+id/deletebutton" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:text="Delete"
+			android:layout_weight="1" />
+	</TableRow>
+
+	<com.google.ads.AdView android:id="@+id/adView"
+		android:layout_above="@+id/tableRow1" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" ads:adUnitId="a14de9564f40059"
+		ads:adSize="BANNER" ads:loadAdOnCreate="false" />
+
+</RelativeLayout>

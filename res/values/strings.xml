@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, EasyPhotoInventory!</string>
+    <string name="app_name">Easy Inventory</string>
+    <string-array name="unitsofmeasurement">
+        <item>Units</item>
+        <item>Pounds</item>
+        <item>Ounces</item>
+        <item>Grams</item>
+        <item>Pallets</item>
+        <item>Crates</item>
+        <item>Gross</item>
+        <item>Containers</item>
+        <item>Plants</item>
+        <item>Tons</item>
+    </string-array>
+    <string-array name="splits">
+	<item>Dollars</item>   
+    <item>Pounds</item>
+    <item>Euro</item>
+    <item>Bitcoin</item>
+    <item>Gold Bullion</item>
+    <item>Rupees</item>
+    <item>Coin</item>
+    <item>Scrilla</item>
+    <item>Cash</item>
+    <item>Coppers</item>
+    <item>Silver</item>
+    <item>Latinum</item>
+    </string-array>
+</resources>
