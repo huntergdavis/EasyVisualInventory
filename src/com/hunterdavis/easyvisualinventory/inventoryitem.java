@@ -90,7 +90,7 @@ public class inventoryitem extends Activity {
 			Boolean imageScaled = imageHelper.scaleURIAndDisplay(getBaseContext(),tempuri, imgPreView);
 			if(imageScaled == false)
 			{
-				rowCursor.close();
+				//rowCursor.close();
 				//SQLiteDatabase db = InventoryData.getWritableDatabase();
 				//db.delete(InventorySQLHelper.TABLE, "_ID = " + rowId, null);
 				//db.close();

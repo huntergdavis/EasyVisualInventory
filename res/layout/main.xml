@@ -9,8 +9,11 @@
 		android:layout_height="wrap_content" android:id="@+id/galleryPlusRow"
 		android:visibility="visible" android:gravity="center_horizontal"
 		android:layout_weight=".1" android:layout_gravity="fill_horizontal|bottom">
+		<Button android:id="@+id/noPhotoPlusbutton" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:text="+"
+			android:textSize="8dip" android:onClick="AddNewItem" />		
 		<Button android:id="@+id/plusbutton" android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:text="New"
+			android:layout_width="wrap_content" android:text="Photo+"
 			android:textSize="8dip" android:onClick="AddNewItem" />
 		<Gallery android:id="@+id/photoInventory"
 			android:layout_width="fill_parent" android:layout_height="wrap_content" />

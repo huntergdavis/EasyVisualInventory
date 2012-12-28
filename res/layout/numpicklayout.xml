@@ -16,7 +16,6 @@
 		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
 		android:layout_toRightOf="@id/RateTitle"
-		android:layout_alignLeft="@+id/SpinMeasure"
 		android:gravity="center"
 		plusminus_width="50"
 		vertical="false"

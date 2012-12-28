@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crittercism.app.Crittercism;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 import com.hunterdavis.easyinventory.R;
@@ -61,6 +62,8 @@ public class EasyVisualInventory extends Activity {
 	private int currentBulkSaleNumber;
 	public int currentBuySellSelection;
 	private Context privateContext;
+	private Cursor rowCursor;
+	private boolean isACursorActive = false;
 
 	public class UriD {
 		Uri uri;
@@ -87,6 +90,9 @@ public class EasyVisualInventory extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// crittercism
+		Crittercism.init(getApplicationContext(), "50de0db4421c986704000006");
 
 		loadImageURIsIntoGallery();
 		currentPosition = 0;
@@ -117,6 +123,16 @@ public class EasyVisualInventory extends Activity {
 			}
 		};
 
+		// Create an anonymous implementation of OnClickListener
+		OnClickListener noPhotoPlusButtonListner = new OnClickListener() {
+			public void onClick(View v) {
+				// do something when the button is clicked
+				Uri uri = Uri
+						.parse("android.resource://com.hunterdavis.easyinventory/drawable/genericimage");
+				createItemWithUri(uri);
+			}
+		};
+
 		OnClickListener infoButtonListner = new OnClickListener() {
 			public void onClick(View v) {
 				Intent myIntent = new Intent(v.getContext(),
@@ -144,7 +160,7 @@ public class EasyVisualInventory extends Activity {
 				sellButtonHandler();
 			}
 		};
-		
+
 		OnClickListener BulkButtonListner = new OnClickListener() {
 			public void onClick(View v) {
 				bulkButtonHandler(v.getContext());
@@ -153,7 +169,7 @@ public class EasyVisualInventory extends Activity {
 
 		Button sellButton = (Button) findViewById(R.id.sellbutton);
 		sellButton.setOnClickListener(SellButtonListner);
-		
+
 		Button bulkButton = (Button) findViewById(R.id.bulkbutton);
 		bulkButton.setOnClickListener(BulkButtonListner);
 
@@ -162,6 +178,9 @@ public class EasyVisualInventory extends Activity {
 
 		Button plusButton = (Button) findViewById(R.id.plusbutton);
 		plusButton.setOnClickListener(plusButtonListner);
+
+		Button noPhotoplusButton = (Button) findViewById(R.id.noPhotoPlusbutton);
+		noPhotoplusButton.setOnClickListener(noPhotoPlusButtonListner);
 
 		Button infoButton = (Button) findViewById(R.id.infobutton);
 		infoButton.setOnClickListener(infoButtonListner);
@@ -179,7 +198,7 @@ public class EasyVisualInventory extends Activity {
 			Boolean scaleDisplay = imageHelper.scaleURIAndDisplay(
 					getBaseContext(), Imgid.get(0).uri, imgView);
 
-			Cursor rowCursor = getCursorByRowNumber(Imgid.get(0).id);
+			getCursorByRowNumber(Imgid.get(0).id);
 			if (rowCursor.getCount() > 0) {
 				rowCursor.moveToFirst();
 				String available = rowCursor.getString(4);
@@ -198,7 +217,7 @@ public class EasyVisualInventory extends Activity {
 					int position, long id) {
 
 				currentPosition = position;
-				Cursor rowCursor = getCursorByRowNumber(Imgid.get(position).id);
+				getCursorByRowNumber(Imgid.get(position).id);
 				rowCursor.moveToFirst();
 				String URI = rowCursor.getString(5);
 				String available = rowCursor.getString(4);
@@ -226,44 +245,44 @@ public class EasyVisualInventory extends Activity {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == SELECT_PICTURE) {
 				Uri selectedImageUri = data.getData();
-				String buyprice = "0";
-				String sellprice = "0";
-				String totalprofit = "0";
-				String amount = "1";
-				String logfile = "begin log file";
-				String divisor = "0";
-				String unitofmeasurement = "Units";
-				String name = "Unnamed Item";
-				// now that we have a picture uri, create a new table entry for
-				// this inventory item
-				SQLiteDatabase db = InventoryData.getWritableDatabase();
-				ContentValues values = new ContentValues();
-				values.put(InventorySQLHelper.URI, selectedImageUri.toString());
-				values.put(InventorySQLHelper.BUYPRICE, buyprice);
-				values.put(InventorySQLHelper.SELLPRICE, sellprice);
-				values.put(InventorySQLHelper.TOTALPROFIT, totalprofit);
-				values.put(InventorySQLHelper.AMOUNT, amount);
-				values.put(InventorySQLHelper.LOGFILE, logfile);
-				values.put(InventorySQLHelper.DIVISOR, divisor);
-				values.put(InventorySQLHelper.UNITOFMEASUREMENT,
-						unitofmeasurement);
-				values.put(InventorySQLHelper.NAME, name);
-				long latestRowId = db.insert(InventorySQLHelper.TABLE, null,
-						values);
-				db.close();
-
-				Intent myIntent = new Intent(getBaseContext(),
-						inventoryitem.class);
-				String rowIdString = String.valueOf(latestRowId);
-				Integer rowId = Integer.valueOf(rowIdString);
-				myIntent.putExtra("id", rowId);
-				startActivityForResult(myIntent, MORE_INFO);
-
-				// enable the buttons
-				toggleButtons(true);
-
+				createItemWithUri(selectedImageUri);
 			}
 		}
+	}
+
+	public void createItemWithUri(Uri selectedImageUri) {
+		String buyprice = "0";
+		String sellprice = "0";
+		String totalprofit = "0";
+		String amount = "1";
+		String logfile = "begin log file";
+		String divisor = "0";
+		String unitofmeasurement = "Units";
+		String name = "Unnamed Item";
+		// now that we have a picture uri, create a new table entry for
+		// this inventory item
+		SQLiteDatabase db = InventoryData.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(InventorySQLHelper.URI, selectedImageUri.toString());
+		values.put(InventorySQLHelper.BUYPRICE, buyprice);
+		values.put(InventorySQLHelper.SELLPRICE, sellprice);
+		values.put(InventorySQLHelper.TOTALPROFIT, totalprofit);
+		values.put(InventorySQLHelper.AMOUNT, amount);
+		values.put(InventorySQLHelper.LOGFILE, logfile);
+		values.put(InventorySQLHelper.DIVISOR, divisor);
+		values.put(InventorySQLHelper.UNITOFMEASUREMENT, unitofmeasurement);
+		values.put(InventorySQLHelper.NAME, name);
+		long latestRowId = db.insert(InventorySQLHelper.TABLE, null, values);
+		db.close();
+
+		Intent myIntent = new Intent(getBaseContext(), inventoryitem.class);
+		String rowIdString = String.valueOf(latestRowId);
+		Integer rowId = Integer.valueOf(rowIdString);
+		myIntent.putExtra("id", rowId);
+		startActivityForResult(myIntent, MORE_INFO);
+
+		// enable the buttons
+		toggleButtons(true);
 	}
 
 	public void RefreshMainGallery() {
@@ -285,7 +304,7 @@ public class EasyVisualInventory extends Activity {
 		if (imgSize > 0) {
 			imageHelper.scaleURIAndDisplay(getBaseContext(), Imgid.get(0).uri,
 					imgView);
-			Cursor rowCursor = getCursorByRowNumber(Imgid.get(0).id);
+			getCursorByRowNumber(Imgid.get(0).id);
 			rowCursor.moveToFirst();
 			String available = rowCursor.getString(4);
 			String units = rowCursor.getString(8);
@@ -311,13 +330,11 @@ public class EasyVisualInventory extends Activity {
 		mybutton.setEnabled(toggleOnOff);
 		mybutton = (Button) findViewById(R.id.bulkbutton);
 		mybutton.setEnabled(toggleOnOff);
-		
 
 	}
-	
+
 	public void bulkButtonHandler(Context context) {
-		AlertDialog.Builder alert = new AlertDialog.Builder(
-				context);
+		AlertDialog.Builder alert = new AlertDialog.Builder(context);
 		privateContext = context;
 		alert.setTitle("How Many?");
 		alert.setMessage("Please Enter An Amount To Sell");
@@ -328,93 +345,87 @@ public class EasyVisualInventory extends Activity {
 		input.setText("1");
 		alert.setView(input);
 
-		alert.setPositiveButton("Ok",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
-						String tempitem = input.getText().toString()
-								.trim();
-						int itemNumber = 0;
-						try {
-							itemNumber = Integer.valueOf(tempitem);
-						} catch (NumberFormatException e) {
-							Toast.makeText(getBaseContext(), "Error with numeric value!", Toast.LENGTH_SHORT).show();
-							return;
-						}
-						
-						if(itemNumber > 0) {
-							dialog.dismiss();
-							bulkButtonHandlerStageTwo(privateContext,itemNumber);
-						}
-						
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String tempitem = input.getText().toString().trim();
+				int itemNumber = 0;
+				try {
+					itemNumber = Integer.valueOf(tempitem);
+				} catch (NumberFormatException e) {
+					Toast.makeText(getBaseContext(),
+							"Error with numeric value!", Toast.LENGTH_SHORT)
+							.show();
+					return;
+				}
 
-					}
+				if (itemNumber > 0) {
+					dialog.dismiss();
+					bulkButtonHandlerStageTwo(privateContext, itemNumber);
+				}
 
-				});
+			}
+
+		});
 
 		alert.setNegativeButton("Cancel",
 				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
+					public void onClick(DialogInterface dialog, int whichButton) {
 						// Canceled
 					}
 				});
 
 		alert.show();
 	}
-	
+
 	public void bulkButtonHandlerStageTwo(Context context, int itemNumber) {
 		currentBulkSaleNumber = itemNumber;
-		AlertDialog.Builder alert = new AlertDialog.Builder(
-				context);
+		AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
 		alert.setTitle("How Much?");
 		alert.setMessage("Please Enter The Total Sale Price For All Items Combined");
 
 		// Set an EditText view to get user input
 		final EditText input = new EditText(context);
-		input.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		input.setInputType(InputType.TYPE_CLASS_NUMBER
+				| InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		input.setText("");
 		alert.setView(input);
 
-		alert.setPositiveButton("Ok",
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
-						String tempitem = input.getText().toString()
-								.trim();
-						float itemPrice = -1;
-						try {
-							itemPrice = Float.valueOf(tempitem);
-						} catch (NumberFormatException e) {
-							Toast.makeText(getBaseContext(), "Error with Price!", Toast.LENGTH_SHORT).show();
-							return;
-						}
-						
-						if(itemPrice >= 0.0) {
-							Float divisorSellPrice = itemPrice/currentBulkSaleNumber;
-							executeSellTransaction(currentBulkSaleNumber, divisorSellPrice);
-						}
-						else {
-							Toast.makeText(getBaseContext(), "Cannot Set A Negative Price!", Toast.LENGTH_SHORT).show();
-						}
-						
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				String tempitem = input.getText().toString().trim();
+				float itemPrice = -1;
+				try {
+					itemPrice = Float.valueOf(tempitem);
+				} catch (NumberFormatException e) {
+					Toast.makeText(getBaseContext(), "Error with Price!",
+							Toast.LENGTH_SHORT).show();
+					return;
+				}
 
-					}
+				if (itemPrice >= 0.0) {
+					Float divisorSellPrice = itemPrice / currentBulkSaleNumber;
+					executeSellTransaction(currentBulkSaleNumber,
+							divisorSellPrice);
+				} else {
+					Toast.makeText(getBaseContext(),
+							"Cannot Set A Negative Price!", Toast.LENGTH_SHORT)
+							.show();
+				}
 
-				});
+			}
+
+		});
 
 		alert.setNegativeButton("Cancel",
 				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,
-							int whichButton) {
+					public void onClick(DialogInterface dialog, int whichButton) {
 						// Canceled
 					}
 				});
 
 		alert.show();
-		
-		
+
 	}
 
 	public void changeStatusText(String newStatus) {
@@ -424,12 +435,12 @@ public class EasyVisualInventory extends Activity {
 	}
 
 	public void loadImageURIsIntoGallery() {
-		Cursor cursor = getInventoryCursor();
-		while (cursor.moveToNext()) {
+		getInventoryCursor();
+		while (rowCursor.moveToNext()) {
 			// alertbox("col name",cursor.getColumnName(5));
-			String URI = cursor.getString(5);
+			String URI = rowCursor.getString(5);
 			Uri tempuri = Uri.parse(URI);
-			int ID = cursor.getInt(0);
+			int ID = rowCursor.getInt(0);
 			// alertbox("here is the URI parsed",URI);
 			UriD localUriD = new UriD(tempuri, ID);
 			Imgid.add(localUriD);
@@ -452,20 +463,27 @@ public class EasyVisualInventory extends Activity {
 		db.close();
 	}
 
-	private Cursor getCursorByRowNumber(long rowId) {
+	private void getCursorByRowNumber(long rowId) {
+		if(isACursorActive) {
+			stopManagingCursor(rowCursor);
+		}
 		SQLiteDatabase db = InventoryData.getReadableDatabase();
-		Cursor cursor = db.query(InventorySQLHelper.TABLE, null, "_ID = "
+		rowCursor = db.query(InventorySQLHelper.TABLE, null, "_ID = "
 				+ rowId, null, null, null, null);
-		startManagingCursor(cursor);
-		return cursor;
+		startManagingCursor(rowCursor);
+		isACursorActive = true;
 	}
 
-	private Cursor getInventoryCursor() {
+	private void getInventoryCursor() {
+		if(isACursorActive) {
+			stopManagingCursor(rowCursor);
+		}
+		stopManagingCursor(rowCursor);
 		SQLiteDatabase db = InventoryData.getReadableDatabase();
-		Cursor cursor = db.query(InventorySQLHelper.TABLE, null, null, null,
+		rowCursor = db.query(InventorySQLHelper.TABLE, null, null, null,
 				null, null, null);
-		startManagingCursor(cursor);
-		return cursor;
+		startManagingCursor(rowCursor);
+		isACursorActive = true;
 	}
 
 	private class PickerListener implements NumberPicker.ValueChangeListener {
@@ -508,18 +526,18 @@ public class EasyVisualInventory extends Activity {
 		builder.setPositiveButton("Sell",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						
-						
+
 						int rowId = Imgid.get(currentPosition).id;
-						Cursor rowCursor = getCursorByRowNumber(rowId);
+						getCursorByRowNumber(rowId);
 						Float sellPrice = 0.0f;
 						if (rowCursor.moveToFirst()) {
 							sellPrice = rowCursor.getFloat(2);
 						}
-						rowCursor.close();
-						
+						//rowCursor.close();
+
 						// save info where you want it
-						executeSellTransaction(currentBuySellSelection, sellPrice);
+						executeSellTransaction(currentBuySellSelection,
+								sellPrice);
 						dialog.dismiss();
 					}
 				});
@@ -576,7 +594,7 @@ public class EasyVisualInventory extends Activity {
 	protected void executeSellTransaction(int amount, float price) {
 		// get a cursor for all the info we'll need
 		int rowId = Imgid.get(currentPosition).id;
-		Cursor rowCursor = getCursorByRowNumber(rowId);
+		getCursorByRowNumber(rowId);
 		if (rowCursor.moveToFirst()) {
 			// retrieve our values for this row
 			// String URI = rowCursor.getString(5);
@@ -586,9 +604,9 @@ public class EasyVisualInventory extends Activity {
 			Integer divisor = rowCursor.getInt(7);
 			String logFile = rowCursor.getString(6);
 			Float totalProfit = rowCursor.getFloat(3);
-			
+
 			// close the row cursor
-			rowCursor.close();
+			//rowCursor.close();
 
 			// calculate and set the new profit
 			Float totalSalePrice = price * amount;
@@ -620,7 +638,7 @@ public class EasyVisualInventory extends Activity {
 	protected void executeBuyTransaction(int amount) {
 		// get a cursor for all the info we'll need
 		int rowId = Imgid.get(currentPosition).id;
-		Cursor rowCursor = getCursorByRowNumber(rowId);
+		getCursorByRowNumber(rowId);
 		if (rowCursor.moveToFirst()) {
 			// retrieve our values for this row
 			// String URI = rowCursor.getString(5);
@@ -633,7 +651,7 @@ public class EasyVisualInventory extends Activity {
 			Float buyPrice = rowCursor.getFloat(1);
 
 			// close the row cursor
-			rowCursor.close();
+			//rowCursor.close();
 
 			// calculate and set the new profit
 			Float totalPurchasePrice = buyPrice * amount;
