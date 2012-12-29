@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.widget.ImageView;
 
 public class imageHelper {
-	public static Boolean scaleURIAndDisplay(Context context, Uri uri, ImageView imgview) {
+	public synchronized static Boolean scaleURIAndDisplay(Context context, Uri uri, ImageView imgview) {
 		double divisorDouble = 256;
 		InputStream photoStream;
 		try {
@@ -43,7 +43,7 @@ public class imageHelper {
         }
 
          Bitmap scaled = Bitmap.createScaledBitmap(photoBitmap, w, h, true);
-         photoBitmap.recycle();
+         //photoBitmap.recycle();
          imgview.setImageBitmap(scaled);
          return true;
 	}

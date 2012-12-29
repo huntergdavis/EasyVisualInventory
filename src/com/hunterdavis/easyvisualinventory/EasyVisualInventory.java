@@ -466,6 +466,7 @@ public class EasyVisualInventory extends Activity {
 	private void getCursorByRowNumber(long rowId) {
 		if(isACursorActive) {
 			stopManagingCursor(rowCursor);
+			rowCursor.close();
 		}
 		SQLiteDatabase db = InventoryData.getReadableDatabase();
 		rowCursor = db.query(InventorySQLHelper.TABLE, null, "_ID = "
@@ -477,8 +478,8 @@ public class EasyVisualInventory extends Activity {
 	private void getInventoryCursor() {
 		if(isACursorActive) {
 			stopManagingCursor(rowCursor);
+			rowCursor.close();
 		}
-		stopManagingCursor(rowCursor);
 		SQLiteDatabase db = InventoryData.getReadableDatabase();
 		rowCursor = db.query(InventorySQLHelper.TABLE, null, null, null,
 				null, null, null);
